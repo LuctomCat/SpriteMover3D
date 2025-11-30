@@ -23,8 +23,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         // Spawn player at coordinates
-        if (playerPawnPrefab != null)
-            SpawnPlayer();
+        //if (playerPawnPrefab != null)
+            //SpawnPlayer();
     }
 
     public GameObject SpawnPlayer()
@@ -46,6 +46,6 @@ public class GameManager : MonoBehaviour
         // Lives counter
         lives = Mathf.Max(0, lives - 1);
         Debug.Log("Player destroyed. Lives remaining: " + lives);
-        // will add respawning later
+        // will add respawning in a bit
     }
 }

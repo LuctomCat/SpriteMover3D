@@ -1,14 +1,29 @@
 using UnityEngine;
-//fix
+using System.Collections.Generic;
+
 public class LevelData : MonoBehaviour
 {
-    [Header("Level Size (meters)")]
-    public Vector3 levelSize = new Vector3(100f, 100f, 100f);
+    [Header("Y-Axis Limit")]
+    public float maxY = 30f;
 
-    [Header("Ground")]
-    public Transform groundTransform;
+    [Header("Spawn Counts")]
+    public int numUFOs = 3;
+    public int numAstronauts = 5;
+    public int numHealthPacks = 3;
 
-    [Header("Notes / Designer data")]
-    [TextArea]
-    public string notes;
+    [Header("Collect Spawn Points Automatically")]
+    public List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
+
+    void Awake()
+    {
+        spawnPoints.Clear();
+        spawnPoints.AddRange(GetComponentsInChildren<SpawnPoint>());
+    }
+
+    public Vector3 ClampY(Vector3 pos)
+    {
+        if (pos.y > maxY)
+            return new Vector3(pos.x, maxY, pos.z);
+        return pos;
+    }
 }

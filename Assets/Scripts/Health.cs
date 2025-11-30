@@ -1,41 +1,49 @@
 using UnityEngine;
-//fix
+using System;
+
 public class Health : MonoBehaviour
 {
-    public float maxHealth = 100f;
     public float currentHealth;
+    public float maxHealth = 100f;
 
-    void Awake()
+    // Add this:
+    public Action onDeath;
+
+    void Start()
     {
         currentHealth = maxHealth;
     }
 
-    public virtual void TakeDamage(float amount)
+    public void TakeDamage(float amount)
     {
         currentHealth -= amount;
-        currentHealth = Mathf.Max(0f, currentHealth);
-
-        if (currentHealth <= 0f)
+        if (!IsAlive())
+        {
+            currentHealth = 0;
             Die();
+        }
     }
 
-    public virtual void Heal(float amount)
+    public void Heal(float amount)
     {
-        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+        currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
     }
 
-    // Call Death Component
-    protected virtual void Die()
+    public void Die()
     {
+        // Notify any listeners
+        onDeath?.Invoke();
+
+        // Existing death behavior
         Death death = GetComponent<Death>();
         if (death != null)
+        {
             death.Die();
-        else
-            Destroy(gameObject);
+        }
     }
 
     public bool IsAlive()
     {
-        return currentHealth > 0f;
+        return currentHealth > 0;
     }
 }
